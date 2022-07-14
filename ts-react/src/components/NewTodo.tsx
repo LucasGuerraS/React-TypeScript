@@ -1,24 +1,30 @@
-import React, { useRef } from "react";
+import { useRef, useContext } from "react";
 
-const NewTodo = () => {
+import { TodosContext } from "../store/todos-context";
+import classes from "./NewTodo.module.css";
+
+const NewTodo: React.FC = () => {
+  const todosCtx = useContext(TodosContext);
+
   const todoTextInputRef = useRef<HTMLInputElement>(null);
 
-  const sumbitHandler = (event: React.FormEvent) => {
+  const submitHandler = (event: React.FormEvent) => {
     event.preventDefault();
 
-    const eneteredText = todoTextInputRef.current!.value;
+    const enteredText = todoTextInputRef.current!.value;
 
-    if (eneteredText.trim().length === 0) {
+    if (enteredText.trim().length === 0) {
+      // throw an error
       return;
     }
 
-    
+    todosCtx.addTodo(enteredText);
   };
 
   return (
-    <form onSubmit={sumbitHandler}>
-      <label htmlFor="text">Todo Text</label>
-      <input type="text" id="text" ref={todoTextInputRef}></input>
+    <form onSubmit={submitHandler} className={classes.form}>
+      <label htmlFor="text">Todo text</label>
+      <input type="text" id="text" ref={todoTextInputRef} />
       <button>Add Todo</button>
     </form>
   );
